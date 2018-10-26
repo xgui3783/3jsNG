@@ -25,5 +25,9 @@ npm run dev-server
 npm run build
 ```
 
+Tested in browser by
+
+<a href = "https://www.browserstack.com/"><img src = "src/Browserstack-logo.svg"/></a>
+
 ## License
 MIT
