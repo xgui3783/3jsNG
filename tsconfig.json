@@ -1,16 +1,16 @@
-
 {
   "compilerOptions": {
-      "allowJs": true,
-      "lib":["es2015","es2017","dom"],
-      "target": "es5",
-      "noImplicitAny": false,
-      "sourceMap": true
+    "allowJs": true,
+    "lib":["es2015","es2017","dom"],
+    "target": "es5",
+    "noImplicitAny": false,
+    "sourceMap": true
   },
   "include" : [
     "src/*.ts"
   ],
   "exclude" : [
-      "node_modules"
+    "node_modules",
+    "thirdparty"
   ]
 }

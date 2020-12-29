@@ -24,7 +24,8 @@ module.exports = {
     }]
   },
   output: {
-    filename: '[name].js'
+    filename: '[name].js',
+    publicPath: '/'
   },
   resolve: {
     extensions : ['.ts','.js']
