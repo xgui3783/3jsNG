@@ -1,6 +1,8 @@
 # 3jsNG
 
-A [ThreeJS](https://threejs.org/) mesh interpreter for [neuroglancer](https://github.com/google/neuroglancer) mesh format. 
+A [ThreeJS](https://threejs.org/) mesh interpreter for [neuroglancer](https://github.com/google/neuroglancer) mesh format and [draco](https://github.com/google/draco) format. 
+
+Netlify deployment: <https://3js-ng.netlify.app/>
 
 ## Getting Started
 
