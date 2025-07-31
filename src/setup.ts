@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 
 /**
  * setup scene, lights, etc
@@ -65,7 +66,7 @@ export function setupControl({ camera, element }){
   /**
    * only orbital control for now
    */
-  const control = new THREE.OrbitControls(camera, element)
+  const control = new OrbitControls(camera, element)
 
   /**
    * as the camera is at origin, controls seems to be inverted.

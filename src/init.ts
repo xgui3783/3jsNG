@@ -1,9 +1,6 @@
-import * as THREE from 'three'
-(<any> window).THREE = THREE
-import 'three/examples/js/controls/TrackballControls'
-import 'three/examples/js/controls/OrbitControls'
+import * as THREE from 'three';
 
-const canvas: HTMLCanvasElement = document.querySelector('canvas#canvas')
+const canvas: HTMLCanvasElement = document.querySelector('canvas#canvas')!
 const renderer = new THREE.WebGLRenderer({
   antialias: true,
   logarithmicDepthBuffer: true,

@@ -1,3 +1,5 @@
+import Worker from "./worker.ts?worker"
+
 export enum EnumWorkerEvents {
   LOAD_BY_URL,
   LOAD_BY_FILE,
@@ -14,11 +16,11 @@ export enum EnumMeshType {
 export function getUuid(){
   return crypto.getRandomValues(new Uint32Array(1))[0].toString(16)
 }
-
+  
 export function getWorkerAsync(){
 
   const map = new Map<string, { rs: Function, rj: Function }>()
-  const w = new Worker('webworker.js')
+  const w = new Worker() 
 
   w.onmessage = (ev: MessageEvent) => {
     const { data } = ev

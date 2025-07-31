@@ -44,7 +44,6 @@
     opacity: 0;
 
     transition: opacity 200ms ease-in-out;
-    pointer-events: drag;
   }
   .drop-active .drop-overlay
   {
@@ -90,9 +89,20 @@
       <div id="drop-zone" class="card mt-2 position-relative">
         <div class="card-body">
           <div class="card-title">
-            URL or drop local mesh
+            drag and drop local mesh here
           </div>
 
+        </div>
+
+        <div id="drop-overlay" class="position-absolute drop-overlay d-flex justify-content-center align-items-center pe-none">
+          Drop file here
+        </div>
+      </div>
+      
+      <div class="card mt-2">
+        <div class="card-body">
+          <div class="card-title">from URL</div>
+          
           <div class="input-group">
             <div class="input-group-prepend">
               <span class="input-group-text">URL</span>
@@ -106,14 +116,11 @@
             </div>
           </div>
         </div>
-
-        <div id="drop-overlay" class="position-absolute drop-overlay d-flex justify-content-center align-items-center">
-          Drop file here
-        </div>
       </div>
     </div>
   </div>
 </body>
 <!-- async is necessary so that the reset of the script loads first and THREE global object is defined -->
-<script src="thirdparty/DRACOLoader.js" async></script>
+<script type="module" src="/src/main.ts"></script>
+<!-- <script type="module" src="thirdparty/DRACOLoader.js"></script> -->
 </html>

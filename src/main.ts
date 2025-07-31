@@ -19,7 +19,7 @@ setupControl({
   element: renderer.domElement
 })
 
-const animateCb = []
+const animateCb: (() => void)[] = []
 
 const { scene } = setupScene()
 const { gridHelperGeometry, testBoxGeometry } = setupGeometry()
