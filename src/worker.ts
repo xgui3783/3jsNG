@@ -84,7 +84,7 @@ async function loadDracoMeshByUrl(url) {
  * legacy neuroglancer precomputed meshes
  */
 
-async function loadLegacyPrecomputedMeshByUrl(url) {
+async function loadLegacyPrecomputedMeshByUrl(url: string) {
   const resp = await fetch(url)
   const arraybuffer = await resp.arrayBuffer()
   let dv = new DataView(arraybuffer)
@@ -110,14 +110,10 @@ const decodeTriangles = (vertexOffset: number = 4, arrayBuffer : ArrayBuffer, nu
   let v1v0 = new THREE.Vector3()
   let v2v1 = new THREE.Vector3()
 
-  for (let i = 0; i< numIndices; i += 3){
+  for (let i = 0; i < numIndices; i += 3) {
     let i0 = indices[i] * 3, i1 = indices[i + 1] * 3, i2 = indices[i + 2] * 3
-    for(let j = 0; j < 3; j += 1){
-      const _idx = j === 0
-        ? 'x'
-        : j === 1
-          ? 'y'
-          : 'z'
+    for (let j = 0; j < 3; ++j) {
+      const _idx = 'xyz'[j];
       v1v0[_idx] = vertexPositions[i1 + j] - vertexPositions[i0 + j];
       v2v1[_idx] = vertexPositions[i2 + j] - vertexPositions[i1 + j];
     }
@@ -128,11 +124,7 @@ const decodeTriangles = (vertexOffset: number = 4, arrayBuffer : ArrayBuffer, nu
       let index = indices[i + k];
       let offset = index * 3;
       for (let j = 0; j < 3; ++j) {
-        const _idx = j === 0
-        ? 'x'
-        : j === 1
-          ? 'y'
-          : 'z'
+		const _idx = 'xyz'[j];
         vertexNormals[offset + j] += faceNormal[_idx]
       }
     }
@@ -142,3 +134,60 @@ const decodeTriangles = (vertexOffset: number = 4, arrayBuffer : ArrayBuffer, nu
 
   return {vertexPositions, indices, numVertices, vertexNormals, color}
 }
+
+/**
+ * multiresolution neuroglancer precomputed meshes
+ *
+ * assumes that there are the following files located at 'url':
+ * - {url}/info.json  (the json metadata file)
+ * - {url}/0.index    (the index file for the 0-th segment)
+ * - {url}/0          (the data file for the 0-th segment)
+ */
+async function loadMultiresolutionPrecomputedMeshByUrl(url: string) {
+	let resp;
+	// reading info.json
+	resp = await fetch(`${url}/info.josn`);
+	const info = await resp.json();
+
+	// reading the index file
+	resp = await fetch(`${url}/0.index`);
+	const arraybuffer = await resp.arrayBuffer();
+	const dv = new DataView(arraybuffer);
+	const index: {[key: string]: any} = {};
+	let offsetCounter = 0;
+	const offset = () => {
+		const res = offsetCounter;
+		offsetCounter += 4;
+		return res;
+	};
+	index.chunk_shape = [dv.getFloat32(offset(), true), dv.getFloat32(offset(), true), dv.getFloat32(offset(), true)];
+	index.chunk_shape = [dv.getFloat32(offset(), true), dv.getFloat32(offset(), true), dv.getFloat32(offset(), true)];
+	index.num_lods = dv.getUint32(offset(), true);
+	index.lod_scales = [];
+	for (let i = 0; i < index.num_lods; i++) {
+		index.lod_scales.push(dv.getFloat32(offset(), true));
+	}
+	index.vertex_offsets = [];
+	for (let i = 0; i < index.num_lods; i++) {
+		index.vertex_offsets.push([dv.getFloat32(offset(), true), dv.getFloat32(offset(), true), dv.getFloat32(offset(), true)]);
+	}
+	index.num_fragments_per_lod = [];
+	for (let i = 0; i < index.num_lods; i++) {
+		index.num_fragments_per_lod.push(dv.getUint32(offset(), true));
+	}
+	index.fragment_positions = [];
+	index.fragment_offsets = [];
+	for (let lod = 0; lod < index.num_lods; lod++) {
+		index.fragment_positions.push([]);
+		index.fragment_offsets.push([]);
+		for (let i = 0; i < index.num_fragments_per_lod[lod]; i++) {
+			index.fragment_positions.push([dv.getFloat32(offset(), true), dv.getFloat32(offset(), true), dv.getFloat32(offset(), true)]);
+		}
+		for (let i = 0; i < index.num_fragments_per_lod[lod]; i++) {
+			index.fragment_positions.push(dv.getUint32(offset(), true));
+		}
+	}
+
+	// TODO: reading the data file
+}
+
