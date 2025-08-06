@@ -70,6 +70,18 @@ export function setupDom(arg: { meshRoot: THREE.Object3D, defaultMaterial: THREE
     }
   })
 
+  async function loadNgMultiMesh(jsonUrl: string, indexUrl: string, dataUrl: string) {
+    const result = await postMessage({
+      method: EnumWorkerEvents.LOAD_NG_MULTIRES_MESH,
+      params: {
+        jsonUrl, indexUrl, dataUrl
+      }
+    })
+    console.log(result)
+
+    
+  }
+
   /**
    * load mesh
    */

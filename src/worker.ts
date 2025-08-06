@@ -29,6 +29,13 @@ async function handleWorkerEvent(
         throw new Error(`draco decoding should be done in browser`);
       }
     }
+    case EnumWorkerEvents.LOAD_NG_MULTIRES_MESH:
+      const { jsonUrl, indexUrl, dataUrl } = params
+      return {
+        result: await loadMultiresolutionPrecomputedMeshByUrl(jsonUrl, indexUrl, dataUrl),
+        transfers: []
+      }
+      break;
     case EnumWorkerEvents.LOAD_BY_FILE: {
       break;
     }

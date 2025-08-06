@@ -5,6 +5,8 @@ export enum EnumWorkerEvents {
   LOAD_BY_FILE,
 
   READIED_THREE_MESH,
+
+  LOAD_NG_MULTIRES_MESH,
 }
 
 export enum EnumMeshType {
